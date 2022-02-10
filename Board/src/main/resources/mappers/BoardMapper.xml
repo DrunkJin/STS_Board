@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- SQL쿼리 문이 정의되어있는 파일을 XML Mapper라고 함. namespace에는 BoardMapper 인터페이스의 경로가 지정되어있음 이는 XML Mapper의 SQL쿼리 문과 Mapper인터페이스의 메서드를 매핑하기 위해 지정하는 속성.-->
+<mapper namespace="com.board.mapper.BoardMapper">
+
+	<!-- 반복되는 sql문을 지정해놓고 한번에 사용. 이를 매번 사용할 시에 변경사항이 생길 경우에는 전부 다 변경해줘야하고 문제가 발생할 수 있음 -->
+	<sql id="boardColumns">
+		  idx
+		, title
+		, content 
+		, writer
+		, view_cnt
+		, notice_yn
+		, secret_yn
+		, delete_yn
+		, insert_time
+		, update_time
+		, delete_time
+	</sql>
+	<!-- parameterType : 쿼리의 실행에 필요한 파라미터의 타입을 해당 속성에 지정 -->
+	<insert id="insertBoard" parameterType="BoardDTO">
+		INSERT INTO tb_board (
+				<!-- include ==> <sql> 태그에 정의한 boardColumns SQL 조각의 인클루드에 사용되는 태그. -->
+				<include refid="boardColumns"/>
+		) VALUES (
+		<!-- 전달받은 파라미터는 #{ } 표현식을 사용해서 처리 -->
+				  #{idx}
+				, #{title}
+				, #{content}
+				, #{writer}
+				, 0
+				, IFNULL(#{noticeYn}, 'N')
+				, IFNULL(#{secretYn}, 'N')
+				, 'N'
+				, NOW()
+				, NULL
+				, NULL
+		)
+	</insert>
+	<!-- resultType : 쿼리의 실행 결과를 매핑할 타입을 지정 -->
+	<select id="selectBoardDetail" parameterType='long' resultType="BoardDTO">
+		SELECT
+				<include refid="boardColumns" />
+		FROM
+				tb_board
+		WHERE
+				delete_yn = 'N'
+		AND
+				idx = #{idx}
+	</select>
+	
+	<update id="updateBoard" parameterType="BoardDTO">
+		UPDATE tb_board
+		SET
+				update_time = NOW()
+			  , title = #{title}
+			  , content = #{content}
+			  , writer = #{writer}
+			  , notice_yn = IFNULL(#{noticeYn}, 'N')
+			  , secret_yn = IFNULL(#{secretYn}, 'N')
+		WHERE
+				idx = #{idx}
+	</update>
+	
+	<update id="deleteBoard" parameterType = "long">
+		UPDATE tb_board
+		SET
+			  delete_yn = "Y"
+			, delete_time = NOW()
+		WHERE
+			  idx = #{idx}
+	</update>
+	
+	<select id="selectBoardList" parameterType="BoardDTO" resultType="BoardDTO">
+		SELECT
+			<include refid="boardColumns" />
+		FROM
+			  tb_board
+		WHERE
+			  delete_yn = 'N'
+		ORDER BY
+			  notice_yn ASC,
+			  idx DESC,
+			  insert_time DESC
+	</select>
+
+	<select id="selectBoardTotalCount" parameterType="BoardDTO" resultType="int">
+		SELECT
+				  COUNT(*)
+		FROM
+				  tb_board
+		WHERE
+				  delete_yn = 'N'
+	</select>
+
+</mapper>

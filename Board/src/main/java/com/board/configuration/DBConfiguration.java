@@ -47,9 +47,16 @@ public class DBConfiguration {
 	// 마이바티스 XML Mapper, 설정 파일 위치 등을 지정
 	// SqlSessionFactoryBean 자체가 아닌, getObject 메서드가 리턴하는 SqlSessionFactory를 생성합니다.
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-		
 		factoryBean.setDataSource(dataSource());
-//		factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mappers/**/*Mapper.xml"));
+		
+		// 패턴에 포함되는 XML Mapper를 인식하도록하는 역할
+		factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mappers/**/*Mapper.xml"));
+		
+		// 이걸로 풀패키지 경로를 생략가능 만약 복장하다면 com.board.*.domain과 같이 활용가능
+		factoryBean.setTypeAliasesPackage("com.board.domain");
+		
+		// mybatis설정과 관련된 Bean을 설정파일로 지정함.
+		factoryBean.setConfiguration(mybatisConfg());
 		return factoryBean.getObject();
 	}
 	
@@ -57,5 +64,13 @@ public class DBConfiguration {
 	public SqlSessionTemplate sqlSession() throws Exception {
 		return new SqlSessionTemplate(sqlSessionFactory());
 	// SqlSessionTemplate은 SqlSessionFactory를 통해 생성되고 데이터베이스의 커밋, 롤백 등 SQL 실행에 필요한 모든 메서드를 갖는 객체로 생각할 수 있다.
+	}
+	
+	
+	// application.properties에서 mybatis.configuration 으로 시작하는 모든 설정을 읽어서 Bean 으로 등록.
+	@Bean
+	@ConfigurationProperties(prefix = "mybatis.configuration")
+	public org.apache.ibatis.session.Configuration mybatisConfg() {
+		return new org.apache.ibatis.session.Configuration();
 	}
 }
