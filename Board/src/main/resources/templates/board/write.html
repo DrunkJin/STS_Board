@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<!-- xmls:th => 타임리프의 th속성을 사용하기 위해 선언된 네임스페이스. 순수 html로만 이루어진 경우에는 선언하지 않아도 된다. -->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+			<title>This page is a write page</title>
+	</head>
+	<body>
+		<h2>Welcome Spring Boot!</h2>
+		<!-- th:text => JSP처럼 타임리프도 ${}를 통해서 타임리프도 컨트롤러에서 전달받은 데이터에 접근할 수 있음. 해당 속성은 일반적인 텍스트 형식으로 화면에 출력하며
+		JSTL의 c:forEach, c:set 등의 태그와 마찬가지로 여러 속성이 존재함. -->
+		<span th:text="${t}">여기는 제목입니다!</span>
+		<span th:text="${c}">여기는 내용입니다!</span>
+		<span th:text="${w}">여기는 작성자입니다!</span>
+	</body>
+</html>
