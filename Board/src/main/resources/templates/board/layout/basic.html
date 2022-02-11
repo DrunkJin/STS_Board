@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<!-- xmls:th => 타임리프의 th속성을 사용하기 위해 선언된 네임스페이스. 순수 html로만 이루어진 경우에는 선언하지 않아도 된다. -->
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<!-- th:replace => JSP의 <include>와 유사한 속성으로 templates/board 폴더에서 header.html의 main-head 프레그먼트와 body.html의 main-body 프레그먼트를 찾아 해당 코드로 치환한다-->
+	<head th:replace="board/fragments/header :: main-head"> </head>
+	<body th:replace="board/fragments/body :: main-body"> </body>
+</html>

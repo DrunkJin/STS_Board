@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<!-- th:fragment => head태그에 해당 속성을 통해 fragment의 이름을 지정한다. fragment는 다른 HTML에서 include 또는 replace 속성을 사용해서 적용할 수 있다. -->
 	<head th:fragment="main-head">
 		<meta http-equiv="Content=Type" content="text/html; charset=UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 		<meta name="description" content="">
 		<meta name="author" content="">
-	
+		
+		<!-- th:block => layout:fragment 속성에 이름을 지정해서 실제 Content 페이지 내용을 채우는 기능. 동적(Dynamic)인 처리가 필요할 때 사용된다. -->
 		<th:block layout:fragment="title"></th:block>
-	
+		
+		<!-- th:href => <a>태그의 href속성과 동일하고 JSTL의 <c:url> 태그와 마찬가지로 웹 애플리케이션을 구분하는 콘텍스트 경로를 포함한다. application.properties에서 Context Path를 원하는 경로로 변경 가능. -->
 		<link rel="stylesheet" th:href="@{/css/style.css}" />
 		<link rel="stylesheet" th:href="@{/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css}" />
 	
@@ -16,4 +19,3 @@
 	</head>
 </html>
 
-<!-- https://congsong.tistory.com/16?category=749196 -->
